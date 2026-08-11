@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Teks romantis yang akan diketik (Silakan sesuaikan nanti)
     const textContent = `Tak sadar ku temukan, arti kebahagiaan yang selama ini kucari ternyata ada pada seseorang yang kini dengan bangga kupanggil istriku.
 
-Kehadiranmu mengubah banyak hal dalam hidupku. Bersamamu, aku belajar bahwa cinta bukan sekadar tentang rasa, melainkan tentang memilih untuk tetap bertahan dan saling menggenggam dalam setiap keadaan.
+Kehadiranmu mengubah banyak hal yang ada dalam hidupku. Bersamamu, aku belajar bahwa cinta bukan sekadar tentang rasa, melainkan tentang memilih untuk tetap bertahan dan tetap saling menggenggam dalam setiap keadaan.
 
 Dia buatku nyaman.
 Bukan karena dunia terasa indah saat bersamanya, melainkan karena di sisinya aku selalu merasa pulang.
