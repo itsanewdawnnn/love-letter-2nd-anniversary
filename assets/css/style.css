@@ -1,4 +1,3 @@
-/* RESET & BASE */
 * {
     margin: 0;
     padding: 0;
@@ -6,8 +5,7 @@
 }
 
 :root {
-    /* Palet warna yang lebih romantis, hangat, dan lembut (Soft Blush / Dusty Rose) */
-    --bg-color: #fcf9f9; 
+    --bg-color: #fcf9f9;
     --text-primary: #5a4647;
     --text-secondary: #8c7373;
     --accent: #d4a3a3;
@@ -15,14 +13,12 @@
     --paper: #ffffff;
     --font-heading: 'Playfair Display', serif;
     --font-body: 'Montserrat', sans-serif;
-    
-    /* Warna Amplop */
+
     --envelope-main: #f5ecec;
     --envelope-dark: #ebdada;
     --envelope-flap: #efe0e0;
     --envelope-inside: #e0caca;
-    
-    /* Bayangan lembut */
+
     --soft-shadow: 0 15px 40px rgba(138, 107, 107, 0.15);
 }
 
@@ -30,14 +26,112 @@ body {
     background-color: var(--bg-color);
     font-family: var(--font-body);
     color: var(--text-primary);
-    overflow: hidden; 
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
 }
 
-/* PARTICLES (Animasi partikel hati & lingkaran cahaya yang melayang) */
+.hidden {
+    display: none !important;
+}
+
+.lock-screen {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    z-index: 5;
+}
+
+.lock-icon {
+    font-size: 40px;
+    margin-bottom: 18px;
+    animation: floating 4s ease-in-out infinite;
+}
+
+.lock-title {
+    font-family: var(--font-heading);
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent-dark);
+    margin-bottom: 8px;
+}
+
+.lock-date {
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: 1.6rem;
+    color: var(--text-primary);
+    margin-bottom: 35px;
+}
+
+.countdown {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 35px;
+}
+
+.countdown-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--paper);
+    border-radius: 12px;
+    padding: 14px 16px;
+    min-width: 64px;
+    box-shadow: var(--soft-shadow);
+    border: 1px solid rgba(212, 163, 163, 0.25);
+}
+
+.countdown-number {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    color: var(--accent-dark);
+    font-weight: 600;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.countdown-label {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-top: 6px;
+}
+
+.lock-subtitle {
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: 15px;
+    color: var(--text-secondary);
+    max-width: 320px;
+    line-height: 1.7;
+}
+
+@media (max-width: 480px) {
+    .countdown {
+        gap: 8px;
+    }
+    .countdown-item {
+        min-width: 52px;
+        padding: 10px 8px;
+    }
+    .countdown-number {
+        font-size: 1.4rem;
+    }
+    .lock-date {
+        font-size: 1.3rem;
+    }
+}
+
 .particles {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -59,7 +153,6 @@ body {
     100% { transform: translateY(-100vh) scale(1.2) rotate(360deg); opacity: 0; }
 }
 
-/* BACKGROUND BLUR (Fokus saat membaca surat) */
 .bg-blur {
     position: fixed;
     top: 0;
@@ -78,7 +171,6 @@ body {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     background: rgba(252, 249, 249, 0.65);
-    /* Gradasi warna berubah perlahan (soft pink -> soft gold) mengikuti waktu baca */
     animation: bgGradientShift 26s ease-in-out infinite;
 }
 @keyframes bgGradientShift {
@@ -86,7 +178,6 @@ body {
     50% { background: rgba(253, 244, 222, 0.65); }
 }
 
-/* BURST KELOPAK / CONFETTI (transisi amplop -> surat) */
 .burst-container {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -107,7 +198,6 @@ body {
     100% { transform: translate(calc(var(--x) * 1.25), calc(var(--y) + 260px)) scale(0.75) rotate(320deg); opacity: 0; }
 }
 
-/* CONTAINER */
 .container {
     position: relative;
     width: 100%;
@@ -121,7 +211,6 @@ body {
     z-index: 5;
 }
 
-/* HEADER / DEKORASI ATAS */
 .header-decoration {
     text-align: center;
     margin-bottom: 40px;
@@ -148,7 +237,15 @@ body {
     margin: 0 auto;
 }
 
-/* INTRO SCREEN (Tampilan Awal Amplop) */
+.couple-names {
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: 15px;
+    color: var(--text-primary);
+    margin-top: 14px;
+    letter-spacing: 0.5px;
+}
+
 .intro-screen {
     display: flex;
     flex-direction: column;
@@ -163,13 +260,11 @@ body {
     pointer-events: none;
 }
 
-/* ENVELOPE / AMPLOP */
 .envelope-wrapper {
     position: relative;
     width: 320px;
     height: 220px;
     margin-bottom: 40px;
-    /* Efek melayang pelan (Breathing effect) agar tidak kaku */
     animation: floating 4s ease-in-out infinite;
     box-shadow: var(--soft-shadow);
     border-radius: 8px;
@@ -186,7 +281,6 @@ body {
     border-radius: 8px;
 }
 
-/* Bagian dalam belakang amplop */
 .envelope-back {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -195,7 +289,6 @@ body {
     z-index: 0;
 }
 
-/* Surat di dalam amplop (menyembul sedikit di awal) */
 .envelope-letter {
     position: absolute;
     bottom: 5px; left: 15px; right: 15px; height: 190px;
@@ -219,7 +312,6 @@ body {
     opacity: 0.8;
 }
 
-/* Sisi kiri & kanan amplop (dibuat dengan trik CSS border) */
 .envelope-sides {
     position: absolute;
     top: 0; left: 0; width: 0; height: 0;
@@ -230,7 +322,6 @@ body {
     border-radius: 8px;
 }
 
-/* Bagian depan bawah amplop */
 .envelope-front {
     position: absolute;
     bottom: 0; left: 0; width: 0; height: 0;
@@ -241,7 +332,6 @@ body {
     border-radius: 8px;
 }
 
-/* Tutup amplop atas */
 .envelope-flap {
     position: absolute;
     top: 0; left: 0; width: 0; height: 0;
@@ -254,15 +344,14 @@ body {
     border-radius: 8px 8px 0 0;
 }
 
-/* Stamp / Segel Lilin di penutup amplop */
 .envelope-seal {
     position: absolute;
-    top: 110px; /* Posisi tengah amplop tinggi 220px */
-    left: 160px; /* Posisi tengah amplop lebar 320px */
+    top: 110px;
+    left: 160px;
     transform: translate(-50%, -50%);
     width: 40px;
     height: 40px;
-    background-color: #c96b6b; /* Warna lilin merah merona */
+    background-color: #c96b6b;
     border-radius: 50%;
     z-index: 5;
     box-shadow: 0 4px 10px rgba(201, 107, 107, 0.4);
@@ -274,19 +363,17 @@ body {
     transition: opacity 0.4s ease;
 }
 .envelope.open .envelope-seal {
-    opacity: 0; /* Segel hilang saat dibuka */
+    opacity: 0;
 }
 
-/* Animasi Buka Amplop */
 .envelope.open .envelope-flap {
     transform: rotateX(180deg);
-    z-index: 0; 
+    z-index: 0;
 }
 .envelope.extract .envelope-letter {
     transform: translateY(-160px);
 }
 
-/* TEKS PENGANTAR BAWAH AMPLOP */
 .subtitle {
     font-family: var(--font-heading);
     font-size: 15px;
@@ -302,7 +389,6 @@ body {
     to { opacity: 1; }
 }
 
-/* BUTTON BUKA SURAT */
 .btn-open {
     padding: 12px 35px;
     background-color: var(--accent);
@@ -326,7 +412,6 @@ body {
     box-shadow: 0 15px 25px rgba(212, 163, 163, 0.6);
 }
 
-/* LETTER SCREEN (Layar Surat Penuh) */
 .letter-screen {
     position: fixed;
     top: 0;
@@ -357,14 +442,13 @@ body {
     max-height: 85vh;
     background: var(--paper);
     padding: 60px 45px;
-    border-radius: 12px; /* Lebih membulat agar lebih manis (tidak kaku) */
+    border-radius: 12px;
     box-shadow: 0 25px 60px rgba(138, 107, 107, 0.12);
     overflow-y: auto;
     position: relative;
     border: 1px solid rgba(212, 163, 163, 0.2);
 }
 
-/* Custom scrollbar untuk kenyamanan scroll */
 .letter-container::-webkit-scrollbar {
     width: 6px;
 }
@@ -381,7 +465,7 @@ body {
     margin-bottom: 40px;
     color: var(--accent-dark);
     font-weight: 400;
-    font-style: italic; /* Lebih romantis dibanding uppercase tegas */
+    font-style: italic;
     animation: titleGlow 3.2s ease-in-out infinite;
 }
 @keyframes titleGlow {
@@ -389,7 +473,6 @@ body {
     50% { text-shadow: 0 0 18px rgba(212, 163, 163, 0.55), 0 0 28px rgba(212, 163, 163, 0.25); }
 }
 
-/* Sparkle kecil berkedip di sekitar judul */
 .sparkle {
     position: absolute;
     color: var(--accent);
@@ -407,7 +490,6 @@ body {
     50% { opacity: 1; transform: scale(1.15) rotate(180deg); }
 }
 
-/* Hiasan kecil di bawah judul surat */
 .letter-title::after {
     content: '❤';
     display: block;
@@ -423,18 +505,17 @@ body {
     line-height: 2;
     color: var(--text-primary);
     min-height: 200px;
-    text-align: left; /* Rata kiri terasa lebih jujur seperti tulisan tangan */
+    text-align: left;
     font-weight: 300;
 }
 
-/* Highlight untuk frasa-frasa bermakna khusus dalam surat */
 .highlight-word {
     color: var(--accent-dark);
     font-weight: 500;
     padding: 2px 5px;
     margin: 0 -1px;
     border-radius: 5px;
-    background-color: rgba(212, 163, 163, 0.4); /* Menutupi penuh area teks, bukan hanya garis bawah */
+    background-color: rgba(212, 163, 163, 0.4);
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
     animation: highlightGlow 2.6s ease-in-out infinite;
@@ -444,7 +525,6 @@ body {
     50% { background-color: rgba(212, 163, 163, 0.55); box-shadow: 0 0 10px rgba(212, 163, 163, 0.35); }
 }
 
-/* Tanda tangan / stamp di akhir surat (mengalir bersama konten agar ikut ter-scroll) */
 .letter-stamp {
     margin-top: 40px;
     font-family: var(--font-heading);
@@ -460,7 +540,6 @@ body {
     opacity: 1;
 }
 
-/* Cursor efek mesin tik */
 .cursor {
     display: inline-block;
     width: 2px;
@@ -476,7 +555,6 @@ body {
     50% { opacity: 0; }
 }
 
-/* RESPONSIVE DESIGN */
 @media (max-width: 480px) {
     .envelope-wrapper {
         transform: scale(0.9);

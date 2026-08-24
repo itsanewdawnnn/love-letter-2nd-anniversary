@@ -1,30 +1,82 @@
 /**
- * Anniversary Gift Website - Main Script
+ * 2nd Anniversary - Main Script
  * Vanilla JS ES6
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Generate Floating Particles (Hati & Cahaya Melayang)
+    const TARGET_DATE = new Date(2026, 10, 3, 0, 0, 0);
+
+    localStorage.removeItem('suratPreviewUnlocked');
+
+    const lockScreen = document.getElementById('lockScreen');
+    const mainContainer = document.getElementById('mainContainer');
+    const cdDays = document.getElementById('cdDays');
+    const cdHours = document.getElementById('cdHours');
+    const cdMinutes = document.getElementById('cdMinutes');
+    const cdSeconds = document.getElementById('cdSeconds');
+    const urlParams = new URLSearchParams(window.location.search);
+    const isPreviewUnlocked = urlParams.get('unlock') === '1';
+    const isDateReached = new Date() >= TARGET_DATE;
+
+    let countdownInterval = null;
+
+    function showLetterEntrance() {
+        if (countdownInterval) clearInterval(countdownInterval);
+        lockScreen.classList.add('hidden');
+        mainContainer.classList.remove('hidden');
+    }
+
+    function updateCountdown() {
+        const now = new Date();
+        const diff = TARGET_DATE - now;
+
+        if (diff <= 0) {
+            showLetterEntrance();
+            return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        cdDays.textContent = String(days).padStart(2, '0');
+        cdHours.textContent = String(hours).padStart(2, '0');
+        cdMinutes.textContent = String(minutes).padStart(2, '0');
+        cdSeconds.textContent = String(seconds).padStart(2, '0');
+    }
+
+    function showLockCountdown() {
+        mainContainer.classList.add('hidden');
+        lockScreen.classList.remove('hidden');
+        updateCountdown();
+        countdownInterval = setInterval(updateCountdown, 1000);
+    }
+
+    if (isDateReached || isPreviewUnlocked) {
+        showLetterEntrance();
+    } else {
+        showLockCountdown();
+    }
+
     const particlesContainer = document.getElementById('particles');
-    const particleCount = 25; // Jumlah partikel yang beterbangan
+    const particleCount = 25;
 
     for (let i = 0; i < particleCount; i++) {
         const particle = document.createElement('div');
         particle.classList.add('particle');
-        
-        // Randomize ukuran, posisi, durasi, dan jeda
-        const size = Math.random() * 15 + 5; // 5px - 20px
-        const left = Math.random() * 100; // 0% - 100% dari lebar layar
-        const duration = Math.random() * 15 + 10; // 10s - 25s mengambang ke atas
-        const delay = Math.random() * 10; // 0s - 10s jeda awal
-        
+
+        const size = Math.random() * 15 + 5;
+        const left = Math.random() * 100;
+        const duration = Math.random() * 15 + 10;
+        const delay = Math.random() * 10;
+
         particle.style.width = `${size}px`;
         particle.style.height = `${size}px`;
         particle.style.left = `${left}%`;
         particle.style.animationDuration = `${duration}s`;
         particle.style.animationDelay = `${delay}s`;
-        
-        // Sebagian partikel diubah menjadi simbol hati (❤)
+
         if (Math.random() > 0.6) {
             particle.style.backgroundColor = 'transparent';
             particle.innerHTML = '❤';
@@ -38,7 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
         particlesContainer.appendChild(particle);
     }
 
-    // 2. Logika Interaksi Surat
     const btnOpen = document.getElementById('btnOpen');
     const envelope = document.getElementById('envelope');
     const envelopeWrapper = document.getElementById('envelopeWrapper');
@@ -50,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const bgMusic = document.getElementById('bgMusic');
     const letterContainer = document.getElementById('letterContainer');
 
-    // 3. Logika Auto-Scroll (surat bergulir turun perlahan mengikuti teks yang diketik)
     let autoScrollRunning = false;
     let autoScrollPaused = false;
     let resumeScrollTimeout = null;
@@ -70,7 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Easing lembut agar gerakan scroll terasa perlahan, bukan menyentak
         letterContainer.scrollTop = current + diff * 0.045;
         requestAnimationFrame(runAutoScrollStep);
     }
@@ -83,7 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Jika pengguna scroll manual (ingin membaca ulang bagian atas), jeda auto-scroll sejenak
     function handleManualScrollIntent() {
         autoScrollPaused = true;
         clearTimeout(resumeScrollTimeout);
@@ -95,7 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
     letterContainer.addEventListener('wheel', handleManualScrollIntent, { passive: true });
     letterContainer.addEventListener('touchmove', handleManualScrollIntent, { passive: true });
 
-    // 4. Efek Burst Kelopak/Confetti saat transisi amplop -> surat
     const burstContainer = document.getElementById('burstContainer');
     const burstSymbols = ['❤', '✿', '❀', '✦', '⋆'];
 
@@ -124,54 +171,62 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Teks romantis yang akan diketik (Silakan sesuaikan nanti)
     const textContent = `Tak sadar ku temukan, arti kebahagiaan yang selama ini kucari ternyata ada pada seseorang yang kini dengan bangga kupanggil istriku.
 
-Kehadiranmu mengubah banyak hal yang ada dalam hidupku. Bersamamu, aku belajar bahwa cinta bukan sekadar tentang rasa, melainkan tentang memilih untuk tetap bertahan dan tetap saling menggenggam dalam setiap keadaan.
+Kehadiranmu mengubah banyak hal dalam hidupku. Bersamamu, aku belajar bahwa cinta bukan sekadar tentang rasa, melainkan tentang memilih untuk tetap bertahan dan saling menggenggam di setiap keadaan.
 
 Dia buatku nyaman.
 Bukan karena dunia terasa indah saat bersamanya, melainkan karena di sisinya aku selalu merasa pulang.
 
-Bersamamu, aku bisa menjadi diriku sendiri, dengan segala kekurangan dan kelemahanku.
+Ada rasa tenang yang sulit dijelaskan setiap kali bersamamu. Seakan-akan, sesulit apa pun hari yang telah kulewati, semuanya terasa menjadi lebih ringan ketika aku melihatmu.
+
+Aku bahagia ketika dunia membuatku lelah aku memiliki tempat untuk bersandar.
+Bersamamu, aku bisa menjadi diriku sendiri dengan segala kekuranganku.
 Di setiap langkah yang kita tempuh bersama, aku selalu menemukan alasan baru untuk semakin mencintaimu.
 
 Tak terasa, dua tahun sudah kita mengarungi perjalanan ini.
 Rasanya seperti baru kemarin kita mengucapkan janji untuk saling menjaga, namun kini begitu banyak kenangan indah yang telah kita ukir bersama.
 
-Dua tahun ini mengajarkanku bahwa kebahagiaan tidak selalu hadir dalam bentuk hal-hal besar. Terkadang, kebahagiaan hadir lewat percakapan sederhana atau sekadar menikmati waktu bersamamu. Dari semua itu, aku belajar bahwa kebersamaan denganmu adalah anugerah yang tak pernah ingin kusia-siakan.
+Dua tahun ini mengajarkanku bahwa kebahagiaan tak selalu hadir dalam bentuk hal-hal besar. Terkadang kebahagiaan hadir lewat percakapan sederhana atau sekadar menikmati waktu bersamamu. Dari setiap momen itu aku menyadari bahwa menikahimu adalah anugerah terindah dalam hidupku.
 
 Terima kasih telah menjadi rumah bagi hatiku, tempat di mana aku selalu ingin pulang.
-Terima kasih telah mencintaiku dengan sabar, melengkapi setiap bagian hidupku, dan mewarnai hari-hariku yang dulu hanyalah hitam putih.
+Terima kasih karena telah menerimaku, bukan hanya saat aku berada di titik terbaik, tetapi juga ketika aku sedang lelah, keras kepala, dan masih jauh dari sempurna.
+Terima kasih telah mencintaiku dengan sabar, melengkapi setiap bagian hidupku, mewarnai hari-hariku.
 
-Aku mungkin masih jauh dari sempurna, tetapi setiap hari aku terus belajar untuk menjadi suami yang lebih baik untukmu.
+Mungkin belum semua impian kita dapat terwujud hari ini, tapi percayalah bahwa apa yang selama ini kamu inginkan sedang suamimu usahakan. Namun, maafkan suamimu ini jika masih belum bisa memberikan apa yang selama ini engkau impikan.
 
-Mungkin belum semua impian kita dapat terwujud hari ini. Masih ada banyak hal yang sedang kita perjuangkan bersama.
-Percayalah bahwa apa yang selama ini engkau inginkan sedang suamimu usahakan. Namun, maafkan suamimu ini jika masih belum bisa memberikan apa yang selama ini engkau impikan.
+Aku tak tau bagaimana perjalanan kita di masa depan. Mungkin banyak ujian atau hari-hari berat yang harus kita lewati, namun satu yang aku tau, apa pun yang terjadi aku ingin melewati semuanya bersamamu, aku takkan pernah lelah menciptakan kenangan indah yang kelak akan kita kenang bersama.
 
-Aku tidak tau apa yang akan terjadi di masa depan. Mungkin akan ada banyak ujian yang harus kita lewati dan banyak hal yang harus kita perjuangkan bersama. Namun, satu hal yang aku tau, apa pun yang terjadi nanti, aku ingin melewati semuanya bersamamu.
+Jika aku diberi kesempatan untuk mengulang hidupku dari awal, aku akan tetap memilihmu, menggenggam tanganmu, dan berjalan bersamamu.{jeda500}
 
-Aku bahagia telah melewati dua tahun ini bersamamu, dan aku tidak akan pernah lelah menciptakan kenangan indah yang kelak akan kita kenang bersama.
+Karena bersamamu semua terasa indah.{jeda3000}
+Gundah gulana hatiku telah hancur sirna.{jeda3000}
+Janjiku takkan kulepas wahai kau bidadariku dari surga.{jeda3800}
+Tuk selamanya ☺{jeda4000}
 
-Semoga cinta yang kita miliki hari ini tidak pernah berhenti bertumbuh.
-Selamat hari jadi pernikahan kita yang kedua, Sayang.
+Semoga cinta yang kita miliki hari ini tak pernah berhenti bertumbuh. Selamat hari jadi pernikahan kita yang kedua, Sayang.
 
-Aku akan selalu mencintaimu, hari ini, esok, dan selama-lamanya.`;
+Terima kasih telah menjadi istriku, rumahku, dan tempat pulangku. Aku akan selalu mencintaimu, hari ini, esok, dan selama-lamanya.`;
 
-    // Frasa yang ingin ditonjolkan (highlight) saat diketik
-    const highlightPhrases = ['Tak sadar ku temukan,', 'Dia buatku nyaman.'];
+    const highlightPhrases = [
+        { start: 'Tak sadar ku temukan,', end: 'Tak sadar ku temukan,' },
+        { start: 'Dia buatku nyaman.', end: 'Dia buatku nyaman.' },
+        { start: 'Karena bersamamu semua terasa indah.', end: 'Tuk selamanya ☺' },
+    ];
     const highlightRanges = highlightPhrases
-        .map((phrase) => {
-            const start = textContent.indexOf(phrase);
+        .map(({ start: startMarker, end: endMarker }) => {
+            const start = textContent.indexOf(startMarker);
             if (start === -1) return null;
-            return { start, end: start + phrase.length - 1 }; // end = index karakter terakhir frasa
+            const endMarkerIdx = textContent.indexOf(endMarker, start);
+            if (endMarkerIdx === -1) return null;
+            return { start, end: endMarkerIdx + endMarker.length - 1 };
         })
         .filter(Boolean);
 
-    // Container aktif tempat karakter berikutnya ditambahkan (span highlight atau teks utama)
     let activeHighlightSpan = null;
 
-    // Menambahkan satu karakter ke DOM secara langsung (bukan lewat string innerHTML +=)
-    // agar tag <span> highlight tidak ikut ter-parse ulang/ditutup paksa oleh browser.
+    const PAUSE_TOKEN_REGEX = /^\{jeda(\d+)\}/;
+
     function appendChar(container, char) {
         if (char === '\n') {
             container.appendChild(document.createElement('br'));
@@ -186,10 +241,8 @@ Aku akan selalu mencintaimu, hari ini, esok, dan selama-lamanya.`;
     }
 
     btnOpen.addEventListener('click', () => {
-        // Putar musik latar (dipicu oleh klik agar tidak diblokir browser)
         bgMusic.volume = 0;
         bgMusic.play().catch(() => {});
-        // Fade in volume musik secara perlahan
         let vol = 0;
         const fadeInMusic = setInterval(() => {
             vol += 0.05;
@@ -200,49 +253,46 @@ Aku akan selalu mencintaimu, hari ini, esok, dan selama-lamanya.`;
             bgMusic.volume = vol;
         }, 150);
 
-        // Hentikan animasi floating/napas amplop agar transisi pembukaan stabil
         envelopeWrapper.style.animation = 'none';
-        
-        // Sembunyikan tombol dengan efek turun perlahan
+
         btnOpen.style.transform = 'translateY(15px)';
         btnOpen.style.opacity = '0';
         btnOpen.style.pointerEvents = 'none';
 
-        // Buka penutup amplop & hilangkan segel wax
         envelope.classList.add('open');
 
-        // Keluarkan surat dari amplop (delay agar tutup terbuka penuh dahulu)
         setTimeout(() => {
             envelope.classList.add('extract');
-            triggerPetalBurst(); // Ledakan kelopak/confetti sebagai transisi ke layar surat
+            triggerPetalBurst();
         }, 800);
 
-        // Transisi pindah ke layar surat penuh
         setTimeout(() => {
             introScreen.classList.add('fade-out');
-            bgBlur.classList.add('active'); // Latar belakang menjadi blur perlahan
+            bgBlur.classList.add('active');
             letterScreen.classList.remove('hidden');
-            
+
             setTimeout(() => {
                 letterScreen.classList.add('active');
-                
-                // Mulai efek pengetikan surat
+
                 setTimeout(() => {
                     typeWriter(textContent, 0);
                 }, 1000);
             }, 50);
-            
-        }, 2500); // Tunggu animasi surat ditarik keluar selesai
+
+        }, 2500);
     });
 
-    /**
-     * Fungsi Efek Mesin Tik (Typewriter)
-     */
     function typeWriter(text, i) {
         if (i < text.length) {
+            const pauseMatch = text.slice(i).match(PAUSE_TOKEN_REGEX);
+            if (pauseMatch) {
+                const pauseMs = parseInt(pauseMatch[1], 10);
+                setTimeout(() => typeWriter(text, i + pauseMatch[0].length), pauseMs);
+                return;
+            }
+
             const char = text.charAt(i);
 
-            // Buka span highlight (elemen DOM nyata) jika index ini awal frasa yang ditandai
             if (highlightRanges.some((r) => r.start === i)) {
                 const span = document.createElement('span');
                 span.className = 'highlight-word';
@@ -252,31 +302,24 @@ Aku akan selalu mencintaimu, hari ini, esok, dan selama-lamanya.`;
 
             appendChar(activeHighlightSpan || typewriterText, char);
 
-            // Tutup highlight (kembali menulis ke teks utama) jika index ini akhir frasa
             if (highlightRanges.some((r) => r.end === i)) {
                 activeHighlightSpan = null;
             }
 
-            // Ikuti teks yang baru diketik dengan auto-scroll perlahan
             requestAutoScroll();
 
-            // Kecepatan ketik dinamis seperti manusia
             const minSpeed = 40;
             const maxSpeed = 80;
             let speed = Math.floor(Math.random() * (maxSpeed - minSpeed + 1)) + minSpeed;
-            
-            // Jeda lebih lama di titik atau koma untuk kesan emosional
+
             if (char === '.' || char === ',') {
-                speed += 400; 
+                speed += 400;
             }
 
             setTimeout(() => typeWriter(text, i + 1), speed);
         } else {
-            // Animasi selesai, tampilkan tanda tangan setelah teks selesai diketik
             letterStamp.classList.add('show');
-            requestAutoScroll(); // Pastikan tanda tangan ikut terlihat di akhir scroll
-            // Kursor bisa dihilangkan jika mau:
-            // document.querySelector('.cursor').style.opacity = '0';
+            requestAutoScroll();
         }
     }
 });
