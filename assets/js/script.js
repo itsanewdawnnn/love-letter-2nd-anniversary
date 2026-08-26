@@ -4,7 +4,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const TARGET_DATE = new Date(2026, 10, 3, 0, 0, 0);
+    const TARGET_DATE = new Date(2026, 10, 3, 10, 0, 0);
 
     localStorage.removeItem('suratPreviewUnlocked');
 
