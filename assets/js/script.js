@@ -171,12 +171,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    const textContent = `Tak sadar ku temukan, arti kebahagiaan yang selama ini kucari ternyata ada pada seseorang yang kini dengan bangga kupanggil istriku.
+    const textContent = `{t=3.1}Tak sadar ku temukan, {t=6}{fill}arti kebahagiaan yang selama ini kucari ternyata ada pada seseorang yang kini dengan bangga kupanggil istriku.
 
-Kehadiranmu mengubah banyak hal dalam hidupku. Bersamamu, aku belajar bahwa cinta bukan sekadar tentang rasa, melainkan tentang memilih untuk tetap bertahan dan saling menggenggam di setiap keadaan.
+Kehadiranmu mengubah banyak hal dalam hidupku. Bersamamu, aku belajar bahwa cinta bukan sekadar tentang rasa, melainkan tentang memilih untuk tetap bertahan dan saling menggenggam di setiap keadaan.{t=26.5}{t=27.5}
 
-Dia buatku nyaman.
-Bukan karena dunia terasa indah saat bersamanya, melainkan karena di sisinya aku selalu merasa pulang.
+Dia buatku nyaman.{t=30}
+{fill}Bukan karena dunia terasa indah saat bersamanya, melainkan karena di sisinya aku selalu merasa pulang.
 
 Ada rasa tenang yang sulit dijelaskan setiap kali bersamamu. Seakan-akan, sesulit apa pun hari yang telah kulewati, semuanya terasa menjadi lebih ringan ketika aku melihatmu.
 
@@ -190,28 +190,30 @@ Rasanya seperti baru kemarin kita mengucapkan janji untuk saling menjaga, namun 
 Dua tahun ini mengajarkanku bahwa kebahagiaan tak selalu hadir dalam bentuk hal-hal besar. Terkadang kebahagiaan hadir lewat percakapan sederhana atau sekadar menikmati waktu bersamamu. Dari setiap momen itu aku menyadari bahwa menikahimu adalah anugerah terindah dalam hidupku.
 
 Terima kasih telah menjadi rumah bagi hatiku, tempat di mana aku selalu ingin pulang.
-Terima kasih karena telah menerimaku, bukan hanya saat aku berada di titik terbaik, tetapi juga ketika aku sedang lelah, keras kepala, dan masih jauh dari sempurna.
 Terima kasih telah mencintaiku dengan sabar, melengkapi setiap bagian hidupku, mewarnai hari-hariku.
+Terima kasih telah memilih untuk bertahan dan tetap tersenyum meskipun aku tau kamu sering lelah.
 
 Mungkin belum semua impian kita dapat terwujud hari ini, tapi percayalah bahwa apa yang selama ini kamu inginkan sedang suamimu usahakan. Namun, maafkan suamimu ini jika masih belum bisa memberikan apa yang selama ini engkau impikan.
 
 Aku tak tau bagaimana perjalanan kita di masa depan. Mungkin banyak ujian atau hari-hari berat yang harus kita lewati, namun satu yang aku tau, apa pun yang terjadi aku ingin melewati semuanya bersamamu, aku takkan pernah lelah menciptakan kenangan indah yang kelak akan kita kenang bersama.
 
-Jika aku diberi kesempatan untuk mengulang hidupku dari awal, aku akan tetap memilihmu, menggenggam tanganmu, dan berjalan bersamamu.{jeda500}
+Jika aku diberi kesempatan untuk mengulang hidupku dari awal, aku akan tetap memilihmu, menggenggam tanganmu, dan berjalan bersamamu.{t=178.5}{t=179.5}
 
-Karena bersamamu semua terasa indah.{jeda3000}
-Gundah gulana hatiku telah hancur sirna.{jeda3000}
-Janjiku takkan kulepas wahai kau bidadariku dari surga.{jeda3800}
-Tuk selamanya ☺{jeda4000}
+Karena bersamamu semua terasa indah.{t=185.5}
+Gundah gulana hatiku telah hancur sirna.{t=191.5}
+Janjiku takkan kulepas wahai kau bidadariku dari surga.{t=200}
+Tuk selamanyaaa~{t=204.5}
 
-Semoga cinta yang kita miliki hari ini tak pernah berhenti bertumbuh. Selamat hari jadi pernikahan kita yang kedua, Sayang.
+Semoga cinta yang kita miliki hari ini tak akan pernah berhenti bertumbuh.
+Selamat hari jadi pernikahan kita yang kedua, Sayang.
 
-Terima kasih telah menjadi istriku, rumahku, dan tempat pulangku. Aku akan selalu mencintaimu, hari ini, esok, dan selama-lamanya.`;
+Terima kasih telah menjadi istriku, rumahku, dan tempat pulangku.
+Aku akan mencintaimu selalu, di setiap waktu, selama-lamanya, dunia akhirat ♥`;
 
     const highlightPhrases = [
         { start: 'Tak sadar ku temukan,', end: 'Tak sadar ku temukan,' },
         { start: 'Dia buatku nyaman.', end: 'Dia buatku nyaman.' },
-        { start: 'Karena bersamamu semua terasa indah.', end: 'Tuk selamanya ☺' },
+        { start: 'Karena bersamamu semua terasa indah.', end: 'Tuk selamanyaaa~' },
     ];
     const highlightRanges = highlightPhrases
         .map(({ start: startMarker, end: endMarker }) => {
@@ -225,7 +227,19 @@ Terima kasih telah menjadi istriku, rumahku, dan tempat pulangku. Aku akan selal
 
     let activeHighlightSpan = null;
 
-    const PAUSE_TOKEN_REGEX = /^\{jeda(\d+)\}/;
+    const CUE_TOKEN_REGEX = /^\{t=([\d.]+)\}/;
+    const FILL_TOKEN_REGEX = /^\{fill\}/;
+
+    function findCuePoints(text) {
+        const regex = /\{t=([\d.]+)\}\s*(\{fill\})?/g;
+        const cues = [];
+        let match;
+        while ((match = regex.exec(text)) !== null) {
+            cues.push({ pos: match.index, time: parseFloat(match[1]), fill: !!match[2] });
+        }
+        return cues;
+    }
+    const cuePoints = findCuePoints(textContent);
 
     function appendChar(container, char) {
         if (char === '\n') {
@@ -238,6 +252,26 @@ Terima kasih telah menjadi istriku, rumahku, dan tempat pulangku. Aku akan selal
         } else {
             container.appendChild(document.createTextNode(char));
         }
+    }
+
+    function revealCharAt(index) {
+        if (highlightRanges.some((r) => r.start === index)) {
+            const span = document.createElement('span');
+            span.className = 'highlight-word';
+            typewriterText.appendChild(span);
+            activeHighlightSpan = span;
+        }
+
+        appendChar(activeHighlightSpan || typewriterText, textContent.charAt(index));
+
+        if (highlightRanges.some((r) => r.end === index)) {
+            activeHighlightSpan = null;
+        }
+    }
+
+    function finishLetter() {
+        letterStamp.classList.add('show');
+        requestAutoScroll();
     }
 
     btnOpen.addEventListener('click', () => {
@@ -275,37 +309,29 @@ Terima kasih telah menjadi istriku, rumahku, dan tempat pulangku. Aku akan selal
                 letterScreen.classList.add('active');
 
                 setTimeout(() => {
-                    typeWriter(textContent, 0);
-                }, 1000);
+                    startTyping();
+                }, 675);
             }, 50);
 
-        }, 2500);
+        }, 2050);
     });
 
-    function typeWriter(text, i) {
-        if (i < text.length) {
-            const pauseMatch = text.slice(i).match(PAUSE_TOKEN_REGEX);
-            if (pauseMatch) {
-                const pauseMs = parseInt(pauseMatch[1], 10);
-                setTimeout(() => typeWriter(text, i + pauseMatch[0].length), pauseMs);
+    function runClassicTypewriter(i) {
+        if (i < textContent.length) {
+            const cueMatch = textContent.slice(i).match(CUE_TOKEN_REGEX);
+            if (cueMatch) {
+                runClassicTypewriter(i + cueMatch[0].length);
                 return;
             }
 
-            const char = text.charAt(i);
-
-            if (highlightRanges.some((r) => r.start === i)) {
-                const span = document.createElement('span');
-                span.className = 'highlight-word';
-                typewriterText.appendChild(span);
-                activeHighlightSpan = span;
+            const fillMatch = textContent.slice(i).match(FILL_TOKEN_REGEX);
+            if (fillMatch) {
+                runClassicTypewriter(i + fillMatch[0].length);
+                return;
             }
 
-            appendChar(activeHighlightSpan || typewriterText, char);
-
-            if (highlightRanges.some((r) => r.end === i)) {
-                activeHighlightSpan = null;
-            }
-
+            const char = textContent.charAt(i);
+            revealCharAt(i);
             requestAutoScroll();
 
             const minSpeed = 40;
@@ -316,10 +342,113 @@ Terima kasih telah menjadi istriku, rumahku, dan tempat pulangku. Aku akan selal
                 speed += 400;
             }
 
-            setTimeout(() => typeWriter(text, i + 1), speed);
+            setTimeout(() => runClassicTypewriter(i + 1), speed);
         } else {
-            letterStamp.classList.add('show');
-            requestAutoScroll();
+            finishLetter();
+        }
+    }
+
+    const NATURAL_CHAR_MS = 55;
+
+    function skipTokenAt(text, i, boundPos) {
+        const slice = text.slice(i, boundPos);
+        const cueMatch = slice.match(CUE_TOKEN_REGEX);
+        if (cueMatch) return cueMatch[0].length;
+        const fillMatch = slice.match(FILL_TOKEN_REGEX);
+        if (fillMatch) return fillMatch[0].length;
+        return 0;
+    }
+
+    function countVisibleChars(startPos, endPos) {
+        let i = startPos;
+        let count = 0;
+        while (i < endPos) {
+            const skip = skipTokenAt(textContent, i, endPos);
+            if (skip > 0) {
+                i += skip;
+                continue;
+            }
+            i++;
+            count++;
+        }
+        return count;
+    }
+
+    function advanceByVisibleChars(startPos, count, boundPos) {
+        let i = startPos;
+        let remaining = count;
+        while (remaining > 0 && i < boundPos) {
+            const skip = skipTokenAt(textContent, i, boundPos);
+            if (skip > 0) {
+                i += skip;
+                continue;
+            }
+            i++;
+            remaining--;
+        }
+        return Math.min(i, boundPos);
+    }
+
+    function computeSyncedTarget(currentTime) {
+        if (cuePoints.length === 0) return null;
+
+        let segStart = { pos: 0, time: 0, fill: false };
+        for (let k = 0; k < cuePoints.length; k++) {
+            const cue = cuePoints[k];
+            if (currentTime < cue.time) {
+                const elapsedMs = Math.max(0, currentTime - segStart.time) * 1000;
+
+                if (segStart.fill) {
+                    const availableMs = Math.max(1, (cue.time - segStart.time) * 1000);
+                    const numChars = countVisibleChars(segStart.pos, cue.pos);
+                    const perCharMs = numChars > 0 ? Math.max(NATURAL_CHAR_MS, availableMs / numChars) : NATURAL_CHAR_MS;
+                    const revealedCount = Math.floor(elapsedMs / perCharMs);
+                    return advanceByVisibleChars(segStart.pos, revealedCount, cue.pos);
+                }
+
+                const naturalChars = Math.floor(elapsedMs / NATURAL_CHAR_MS);
+                return advanceByVisibleChars(segStart.pos, naturalChars, cue.pos);
+            }
+            segStart = cue;
+        }
+
+        return null;
+    }
+
+    let syncedRevealIndex = 0;
+
+    function runSyncedTypewriter() {
+        if (syncedRevealIndex >= textContent.length) {
+            finishLetter();
+            return;
+        }
+
+        const target = computeSyncedTarget(bgMusic.currentTime || 0);
+
+        if (target === null) {
+            runClassicTypewriter(syncedRevealIndex);
+            return;
+        }
+
+        while (syncedRevealIndex < target && syncedRevealIndex < textContent.length) {
+            const skip = skipTokenAt(textContent, syncedRevealIndex, textContent.length);
+            if (skip > 0) {
+                syncedRevealIndex += skip;
+                continue;
+            }
+            revealCharAt(syncedRevealIndex);
+            syncedRevealIndex++;
+        }
+
+        requestAutoScroll();
+        requestAnimationFrame(runSyncedTypewriter);
+    }
+
+    function startTyping() {
+        if (cuePoints.length > 0 && !bgMusic.paused) {
+            requestAnimationFrame(runSyncedTypewriter);
+        } else {
+            runClassicTypewriter(0);
         }
     }
 });
