@@ -205,7 +205,7 @@ Janjiku takkan kulepas wahai kau bidadariku dari surga.{t=200}
 Tuk selamanyaaa~{t=204.5}
 
 Semoga cinta yang kita miliki hari ini tak akan pernah berhenti bertumbuh.
-Selamat hari jadi pernikahan kita yang kedua, Sayang.
+Selamat hari ulang tahun pernikahan kita yang kedua, Sayang.
 
 Terima kasih telah menjadi istriku, rumahku, dan tempat pulangku.
 Aku akan mencintaimu selalu, di setiap waktu, selama-lamanya, dunia akhirat ♥`;
